@@ -6,6 +6,8 @@ A voice-first seller account review workspace built by Akhil. Review performance
 
 **React · TypeScript · Express · Gemini · Netlify**
 
+[Open Seller360](https://seller360-akhil.netlify.app) · [Source on GitHub](https://github.com/simplyakh1l/Seller360)
+
 An independent portfolio project using clearly disclosed sample seller data. It has no live Snapdeal marketplace connection and performs no marketplace transactions.
 
 ## Run locally
@@ -27,7 +29,7 @@ For a production-style local run use npm run build then npm start. Optional prov
 
 ## Deploy on Netlify
 
-netlify.toml builds the Vite frontend and an Express API function. Set GEMINI_API_KEY as a secret environment variable in Netlify’s Functions scope. Provider/model/runtime settings are declared in the config and can be overridden. Do not upload .env or server/.local.
+netlify.toml builds the Vite frontend and a native Netlify Function that adapts requests into the existing Express API. Configure GEMINI_API_KEY as a secret production environment variable, available to Functions. Also set LLM_PROVIDER=gemini, GEMINI_MODEL=gemini-3.1-flash-lite, LLM_TIMEOUT_MS=25000, SELLER360_HOSTED=1 and APP_URL to the deployed URL in the hosting environment. Settings in netlify.toml are build defaults, not a substitute for runtime configuration. Free-plan variable scopes differ from Pro; no paid upgrade is required. Do not upload .env or server/.local.
 
 Netlify Blobs persists each browser workspace independently, using conditional writes so instances do not simply overwrite each other. Calls retain up to 30 sessions and prune sessions older than 30 days on save. Tasks record local application work, never marketplace changes. The browser holds a separate cache of up to 20 finished calls. Workspace identity is an unguessable browser bearer identifier, not a multi-user account/login system; treat the public site as a sample-data portfolio demo, not a private seller-data service.
 
@@ -72,7 +74,7 @@ POST /api/agent/start, /api/agent/turn, /api/agent/end, /api/actions
 
 PATCH /api/actions/:id
 
-This is a single-user demonstration, with mock data and local persistence. It does not perform marketplace operations or guarantee revenue recovery.
+This is a sample-data portfolio application with separate browser workspaces, server-side persistence on Netlify and no account login. It does not perform marketplace operations or guarantee revenue recovery.
 
 ## Voice call interface
 
@@ -90,7 +92,7 @@ Run npm run build once, then npm start and open http://127.0.0.1:3001. Stop the 
 - Local transcription runs in a dedicated worker with one WASM thread. Silent segments skip inference. Ending a call or leaving its page terminates the worker and releases model memory; downloaded model files remain cached.
 - Ollama uses two CPU threads and a 60-second idle keep-alive. The selected 4B model still needs roughly 3.8 GB while loaded; it unloads after idle and takes longer to load on the next request. The 8K context and selected model are preserved.
 - The first speech-model download can take a while. Browser-native speech is tried first; the on-device fallback stays available when that service fails.
-- A cloud provider can move language-model computation off the laptop, but requires separate provider setup and may have usage limits or charges. It has not been enabled by this change.
+- The deployed application uses Gemini for language-model computation, so visitors do not run Ollama. Provider and hosting limits apply; on-device voice transcription can still consume local resources.
 
 See docs/verification-nova-performance.md for actual measurements and limitations.
 
@@ -98,7 +100,7 @@ See docs/verification-nova-performance.md for actual measurements and limitation
 
 The deliberate light theme uses cobalt #315FDB for interactions and coral only in the logo. Brave Auto Dark Mode had caused the earlier dark screenshot; the new interface was checked in actual Brave without changing its browser settings. Source Sans 3 is self-hosted under its included OFL license.
 
-Suggestions now belongs to Actions; /growth redirects there. Saved calls belongs to Nova. Account data, source limitations and local storage behavior are explained once in Data & privacy. Recheck figures recalculates supplied totals, not marketplace freshness.
+Suggestions now belongs to Actions; /growth redirects there. Saved calls belongs to Nova. Account data, source limitations and storage behavior are explained once in Data & privacy. Recheck figures recalculates supplied totals, not marketplace freshness.
 
 A reusable browser check uses the existing Playwright dependency. Run it against an isolated local API storage directory, with the ordinary server on a different port:
 

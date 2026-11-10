@@ -21,7 +21,8 @@ import {
   updateAction,
 } from "./services/store";
 const app = express();
-if (process.env.NETLIFY) app.set("trust proxy", 1);
+if (process.env.NETLIFY || process.env.SELLER360_HOSTED === "1")
+  app.set("trust proxy", 1);
 app.disable("x-powered-by");
 app.use(
   helmet({

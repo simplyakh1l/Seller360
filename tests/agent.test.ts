@@ -72,6 +72,27 @@ describe("Conversation behaviour without a language model", () => {
       processTurn(id, start.session.id, "hello"),
     ).rejects.toMatchObject({ status: 404 });
   });
+  it("summarizes observed counts without overriding healthy-stock reports with an imperative", async () => {
+    const id = owner();
+    const start = await startSession(id, "en-IN");
+    await processTurn(
+      id,
+      start.session.id,
+      "All bestsellers are in stock and we have no dispatch delays.",
+    );
+    const closed = await endSession(id, start.session.id);
+    expect(closed.session.summary?.issues.join(" ")).not.toContain(
+      "Inventory needs your attention",
+    );
+    expect(closed.session.summary?.issues.join(" ")).toContain(
+      "Out-of-stock products: 5 → 18",
+    );
+    expect(closed.session.summary?.sellerInformation).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ topic: "inventory", status: "denied" }),
+      ]),
+    );
+  });
   it("retains denials and latest corrections without treating questions as facts", () => {
     const s = {
       statements: [],

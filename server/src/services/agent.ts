@@ -187,7 +187,9 @@ export function generateSessionSummary(session: AgentSession): SessionSummary {
               m.changeUnit +
               ")"),
     ),
-    issues: a.insights.filter((i) => i.severity === "high").map((i) => i.title),
+    issues: a.insights
+      .filter((i) => i.severity === "high")
+      .map((i) => "Supplied period data — " + i.evidence),
     sellerInformation: session.statements,
     likelyContributors: session.statements
       .filter((s) => s.status === "reported")
