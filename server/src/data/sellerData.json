@@ -1,0 +1,1 @@
+{"seller":{"id":"SELLER_001","name":"Demo Seller","marketplace":"Snapdeal","currency":"INR"},"performance":{"lastMonth":{"sales":200000,"orders":400,"cancellationRate":8,"averageSellingPrice":500,"outOfStockProducts":5},"thisMonth":{"sales":135000,"orders":270,"cancellationRate":14,"averageSellingPrice":500,"outOfStockProducts":18}}}
